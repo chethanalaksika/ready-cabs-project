@@ -1,65 +1,54 @@
--- 1. Create Database
-CREATE DATABASE ReadyCabsDB;
-GO
-
-USE ReadyCabsDB;
-GO
-
--- 2. Users Table
-CREATE TABLE Users (
-    id NVARCHAR(50) PRIMARY KEY,
-    username NVARCHAR(50) UNIQUE NOT NULL,
-    password NVARCHAR(50) NOT NULL,
-    name NVARCHAR(100),
-    email NVARCHAR(100),
-    whatsapp NVARCHAR(20),
-    selfie NVARCHAR(MAX), -- Store Base64
-    role NVARCHAR(20) DEFAULT 'customer'
+-- 1. Users Table
+CREATE TABLE IF NOT EXISTS Users (
+    id VARCHAR(50) PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    whatsapp VARCHAR(20),
+    selfie TEXT,
+    role VARCHAR(20) DEFAULT 'customer'
 );
-GO
 
--- 3. Cars Table
-CREATE TABLE Cars (
-    id NVARCHAR(50) PRIMARY KEY,
-    brand NVARCHAR(50),
-    model NVARCHAR(50),
-    description NVARCHAR(MAX),
-    pricePerDay INT,
-    image NVARCHAR(MAX), -- Store Base64/URL
-    availableDates NVARCHAR(MAX) -- JSON String stored as Text
+-- 2. Cars Table
+CREATE TABLE IF NOT EXISTS Cars (
+    id VARCHAR(50) PRIMARY KEY,
+    brand VARCHAR(50),
+    model VARCHAR(50),
+    description TEXT,
+    pricePerDay INTEGER,
+    image TEXT,
+    availableDates TEXT
 );
-GO
 
--- 4. Bookings Table
-CREATE TABLE Bookings (
-    id NVARCHAR(50) PRIMARY KEY,
-    carId NVARCHAR(50),
-    customerId NVARCHAR(50),
-    customerName NVARCHAR(100),
-    date NVARCHAR(MAX), -- JSON String of dates array
-    idPhoto NVARCHAR(MAX), -- Base64
-    status NVARCHAR(20), -- pending, accepted, rejected, customer_canceled
-    extraCharge INT,
-    seen BIT DEFAULT 0,
-    adminSeen BIT DEFAULT 0,
-    cancelReason NVARCHAR(MAX),
-    custCancelReason NVARCHAR(MAX)
+-- 3. Bookings Table
+CREATE TABLE IF NOT EXISTS Bookings (
+    id VARCHAR(50) PRIMARY KEY,
+    carId VARCHAR(50),
+    customerId VARCHAR(50),
+    customerName VARCHAR(100),
+    date TEXT,
+    idPhoto TEXT,
+    status VARCHAR(20),
+    extraCharge INTEGER,
+    seen BOOLEAN DEFAULT FALSE,
+    adminSeen BOOLEAN DEFAULT FALSE,
+    cancelReason TEXT,
+    custCancelReason TEXT
 );
-GO
 
--- 5. Messages Table
-CREATE TABLE Messages (
-    id NVARCHAR(50) PRIMARY KEY,
-    [from] NVARCHAR(50),
-    [to] NVARCHAR(50),
-    text NVARCHAR(MAX),
-    image NVARCHAR(MAX),
-    seen BIT DEFAULT 0,
-    timestamp DATETIME DEFAULT GETDATE()
+-- 4. Messages Table
+CREATE TABLE IF NOT EXISTS Messages (
+    id VARCHAR(50) PRIMARY KEY,
+    "from" VARCHAR(50),
+    "to" VARCHAR(50),
+    text TEXT,
+    image TEXT,
+    seen BOOLEAN DEFAULT FALSE,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-GO
 
--- 6. Insert Admin User
+-- 5. Insert Admin User
 INSERT INTO Users (id, username, password, name, email, role)
-VALUES ('u1', 'admin', '1234', 'Ready Admin', 'admin@readycabs.com', 'admin');
-GO
+VALUES ('u1', 'admin', '1234', 'Ready Admin', 'admin@readycabs.com', 'admin')
+ON CONFLICT (username) DO NOTHING;
