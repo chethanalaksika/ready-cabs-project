@@ -101,6 +101,17 @@ app.post('/api/cars', async (req, res) => {
         res.status(201).json({ message: 'Success' });
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
+app.patch('/api/cars/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { brand, model, description, pricePerDay, image, availableDates } = req.body;
+        await pool.query(
+            'UPDATE Cars SET brand = $1, model = $2, description = $3, pricePerDay = $4, image = $5, availableDates = $6 WHERE id = $7',
+            [brand, model, description || '', pricePerDay, image, JSON.stringify(availableDates || []), id]
+        );
+        res.json({ message: 'Success' });
+    } catch (err) { res.status(500).json({ error: err.message }); }
+});
 
 app.get('/api/bookings', async (req, res) => {
     try {

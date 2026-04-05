@@ -482,8 +482,19 @@ function AdminCars({ cars, setCars }) {
     e.preventDefault();
     const cleanForm = { ...formData, pricePerDay: Number(formData.pricePerDay) };
     if (editingCar) {
-      // In a full implementation we would Patch here, but for this step we will skip as it's a prototype car list.
-      setCars(prev => prev.map(c => c.id === editingCar.id ? { ...cleanForm, id: c.id } : c));
+      fetch(`${API_URL}/cars/${editingCar.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cleanForm)
+      }).then(res => {
+        if (res.ok) {
+           setCars(prev => prev.map(c => c.id === editingCar.id ? { ...cleanForm, id: c.id } : c));
+           alert('Vehicle Updated Successfully!');
+           setShowAdd(false); setEditingCar(null); setFormData(initialForm);
+        } else {
+           alert('Failed to update vehicle');
+        }
+      }).catch(e => alert('Connection error'));
     } else {
       const newCar = { ...cleanForm, id: 'c' + Date.now() + Math.random().toString(36).substr(2, 5) };
       console.log("Sending Car Data:", newCar);
