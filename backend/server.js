@@ -185,5 +185,5 @@ async function start() {
 }
 start();
 
-// Export for Netlify Serverless Functions
-module.exports.handler = serverless(app);
+// Export for external API Serverless wrappers
+module.exports = app;

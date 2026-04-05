@@ -42,7 +42,7 @@ const sendEmail = (to_email, to_name, message, subject) => {
     .then((res) => console.log('Email sent!', res), (err) => console.error('Email failed', err));
 };
 
-const API_URL = import.meta.env.DEV ? '' : '/api';
+const API_URL = import.meta.env.DEV ? 'http://127.0.0.1:5000/api' : '/api';
 
 export default function App() {
   const initialBackendFallback = [{ id: 'u1', username: 'admin', password: '1234', name: 'Ready Admin', role: 'admin' }];
