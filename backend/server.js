@@ -57,7 +57,7 @@ app.all(['/api/users/delete/:id', '/api/users/:id'], async (req, res) => {
 });
 
 // CRITICAL: Permanent Booking Deletion
-app.all(['/api/bookings/delete/:id', '/api/bookings/:id'], async (req, res) => {
+app.all(['/api/bookings/delete/:id'], async (req, res) => {
     if (req.method !== 'POST' && req.method !== 'DELETE') return res.status(405).send('Use POST');
     try {
         const { id } = req.params;
