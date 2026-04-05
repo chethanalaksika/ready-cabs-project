@@ -4,7 +4,7 @@
   --bg-dark: #0a0a0f;
   --bg-card: rgba(255, 255, 255, 0.03);
   --bg-card-hover: rgba(255, 255, 255, 0.08);
-  --primary: #f59e0b; /* Golden warm cab color */
+  --primary: #f59e0b;
   --primary-hover: #fbbf24;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
@@ -72,7 +72,6 @@ h1, h2, h3, h4, .brand-font {
   font-family: 'Unbounded', sans-serif;
 }
 
-/* Base Styles & Utility Classes */
 button {
   font-family: 'Inter', sans-serif;
   cursor: pointer;
@@ -134,7 +133,6 @@ input:focus, textarea:focus {
 .btn-success { background: var(--success); color: white; padding: 8px 16px; border-radius: 50px; font-weight: 500; }
 .btn-danger { background: var(--danger); color: white; padding: 8px 16px; border-radius: 50px; font-weight: 500;}
 
-/* Layout */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -199,7 +197,6 @@ input:focus, textarea:focus {
   width: 100%;
 }
 
-/* Glass Card */
 .glass-card {
   background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
   backdrop-filter: blur(16px);
@@ -215,7 +212,6 @@ input:focus, textarea:focus {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
-/* Hero Section (Login/Landing) */
 .login-layout {
   display: flex;
   min-height: 100vh;
@@ -242,7 +238,6 @@ input:focus, textarea:focus {
   user-select: none;
   animation: floatText 10s ease-in-out infinite alternate;
 }
-
 .login-bg-text span {
   display: block;
   background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
@@ -282,7 +277,6 @@ input:focus, textarea:focus {
   color: var(--text-muted);
 }
 
-/* Grid Layouts */
 .grid-cars {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -321,14 +315,12 @@ input:focus, textarea:focus {
   font-size: 1.25rem;
   margin-bottom: 8px;
 }
-
 .car-desc {
   font-size: 0.9rem;
   color: var(--text-muted);
   flex: 1;
   margin-bottom: 16px;
 }
-
 .car-price {
   font-size: 1.2rem;
   font-weight: 700;
@@ -336,7 +328,6 @@ input:focus, textarea:focus {
   margin-bottom: 16px;
 }
 
-/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -361,6 +352,12 @@ input:focus, textarea:focus {
   animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.admin-modal-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  width: 100%;
+}
+
 .modal-header {
   padding: 20px 24px;
   border-bottom: 1px solid var(--border-color);
@@ -378,7 +375,6 @@ input:focus, textarea:focus {
 }
 .modal-close:hover { color: white; }
 
-/* Table for Admin Lists */
 .table-wrapper {
   overflow-x: auto;
   background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
@@ -400,6 +396,7 @@ th, td {
   padding: 16px;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
 }
 th {
   font-weight: 600;
@@ -422,7 +419,6 @@ tr:hover { background: rgba(255,255,255,0.02); }
 .badge-accepted { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
 .badge-rejected { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
 
-/* Calendar Grid */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -454,7 +450,6 @@ tr:hover { background: rgba(255,255,255,0.02); }
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-/* Animations */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -470,7 +465,6 @@ tr:hover { background: rgba(255,255,255,0.02); }
   color: var(--text-muted);
 }
 
-/* CUSTOMER HERO DESIGNS */
 .hero-customer {
   min-height: 70vh;
   display: flex;
@@ -479,7 +473,7 @@ tr:hover { background: rgba(255,255,255,0.02); }
   align-items: center;
   text-align: center;
   position: relative;
-  margin-top: -40px; /* pull up over the padding */
+  margin-top: -40px;
   padding: 40px;
   overflow: hidden;
 }
@@ -508,7 +502,7 @@ tr:hover { background: rgba(255,255,255,0.02); }
   text-transform: uppercase;
   letter-spacing: 4px;
   animation: fadeUp 1.2s ease-out forwards;
-  opacity: 0; /* needed for fadeUp */
+  opacity: 0;
 }
 
 .scroll-indicator {
@@ -562,9 +556,77 @@ tr:hover { background: rgba(255,255,255,0.02); }
   opacity: 0;
 }
 
-.car-card {
-  background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-  border-top: 1px solid rgba(255,255,255,0.15);
-  border-left: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
+/* ======== MOBILE RESPONSIVENESS (v9.5) ======== */
+@media screen and (max-width: 768px) {
+  .navbar {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+
+  .nav-links {
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-link {
+    font-size: 0.75rem;
+  }
+
+  .main-content {
+    padding: 20px 15px;
+    margin-top: 20px;
+  }
+  
+  .hero-customer {
+    min-height: 50vh;
+    padding: 20px;
+  }
+  
+  .glass-card {
+    padding: 16px;
+  }
+
+  .grid-cars {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-end; /* Pop up from bottom on mobile */
+  }
+  
+  .modal-content {
+    padding: 0;
+    max-height: 90vh;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .admin-modal-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-modal-grid > div {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  table {
+    font-size: 0.85rem;
+  }
+
+  th, td {
+    padding: 12px 10px;
+  }
+
+  .auth-box {
+    padding: 20px;
+    margin: 20px;
+  }
 }
