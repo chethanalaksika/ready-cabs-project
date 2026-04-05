@@ -56,6 +56,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('cars');
   const [custCancel, setCustCancel] = useState(null);
   const [custReason, setCustReason] = useState('');
+  const [showDeveloper, setShowDeveloper] = useState(false);
 
   // Auto-reset tab on login/logout (v9.5 Reliability Fix)
   useEffect(() => {
@@ -234,6 +235,62 @@ export default function App() {
       )}
 
       <ChatWidget currentUser={currentUser} users={users} messages={messages} setMessages={setMessages} />
+
+      {/* Developer Watermark Button */}
+      <button 
+        onClick={() => setShowDeveloper(true)}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          background: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          backdropFilter: 'blur(10px)',
+          padding: '10px 18px',
+          borderRadius: '50px',
+          color: 'var(--text-muted)',
+          fontSize: '0.8rem',
+          fontWeight: '600',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          zIndex: 9000,
+          cursor: 'pointer',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseOver={e => { e.currentTarget.style.background = 'rgba(245, 158, 11, 0.15)'; e.currentTarget.style.color = 'var(--primary)'; e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.4)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+        onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+      >
+        <div style={{ width: '8px', height: '8px', background: 'var(--primary)', borderRadius: '50%', boxShadow: '0 0 10px var(--primary)' }}></div> Developed By
+      </button>
+
+      {/* Developer Modal */}
+      {showDeveloper && (
+        <div className="modal-overlay" style={{ zIndex: 10002, backdropFilter: 'blur(20px)' }} onClick={() => setShowDeveloper(false)}>
+          <div className="glass-card modal-content" style={{ maxWidth: '400px', padding: '40px', textAlign: 'center', border: '1px solid rgba(245, 158, 11, 0.4)', background: '#0a0a0f' }} onClick={e => e.stopPropagation()}>
+             <div style={{ width: '80px', height: '80px', background: 'var(--primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', margin: '0 auto 20px', boxShadow: '0 0 30px rgba(245, 158, 11, 0.4)', color: '#000' }}>⭐</div>
+             <h3 className="brand-font" style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '2px' }}>Software Engineer</h3>
+             <h2 className="brand-font" style={{ fontSize: '2.2rem', color: '#fff', marginBottom: '25px' }}>Chethana Laksika</h2>
+             
+             <div style={{ background: 'rgba(255,255,255,0.03)', padding: '25px 20px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)', marginBottom: '30px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px', color: 'var(--text-main)', fontSize: '1.1rem', fontWeight: 500 }}>
+                   <span style={{ fontSize: '1.5rem' }}>📞</span> 070 566 4601
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', color: 'var(--text-main)', fontSize: '1rem', fontStyle: 'italic', wordBreak: 'break-all' }}>
+                   <span style={{ fontSize: '1.5rem' }}>✉️</span> chethanalaksika9@gmail.com
+                </div>
+             </div>
+
+             <button 
+               className="btn-primary" 
+               style={{ width: '100%', height: '55px', borderRadius: '50px', fontSize: '1rem', fontWeight: 800, textTransform: 'uppercase' }} 
+               onClick={() => setShowDeveloper(false)}
+             >
+               Close Developer Info
+             </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
