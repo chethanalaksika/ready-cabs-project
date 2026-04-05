@@ -42,6 +42,8 @@ const sendEmail = (to_email, to_name, message, subject) => {
     .then((res) => console.log('Email sent!', res), (err) => console.error('Email failed', err));
 };
 
+const API_URL = import.meta.env.DEV ? 'http://127.0.0.1:5000/api' : '/api';
+
 export default function App() {
   const initialBackendFallback = [{ id: 'u1', username: 'admin', password: '1234', name: 'Ready Admin', role: 'admin' }];
   const [users, setUsers] = useState(initialBackendFallback);
@@ -62,8 +64,6 @@ export default function App() {
        else setActiveTab('cars');
     }
   }, [currentUser]);
-
-  const API_URL = import.meta.env.DEV ? 'http://127.0.0.1:5000/api' : '/api';
 
   // --- INITIAL DATA FETCH (PG) ---
   useEffect(() => {
@@ -450,8 +450,15 @@ function AdminCars({ cars, setCars }) {
   };
 
   const executeDelete = () => {
-    setCars(prev => prev.filter(x => x.id !== confirmDelete.id));
-    setConfirmDelete(null);
+    fetch(`${API_URL}/cars/delete/${confirmDelete.id}`, { method: 'POST' })
+      .then(res => {
+        if (res.ok) {
+          setCars(prev => prev.filter(x => x.id !== confirmDelete.id));
+          setConfirmDelete(null);
+        } else {
+          alert('Failed to delete from database');
+        }
+      });
   };
 
   const toggleDate = (d) => {

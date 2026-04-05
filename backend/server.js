@@ -68,6 +68,17 @@ app.all(['/api/bookings/delete/:id', '/api/bookings/:id'], async (req, res) => {
     }
 });
 
+// CRITICAL: Permanent Car Deletion
+app.post('/api/cars/delete/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.query('DELETE FROM Cars WHERE id = $1', [id]);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/api/cars', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM Cars');
