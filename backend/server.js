@@ -159,13 +159,18 @@ async function start() {
     try {
         console.log('⏳ Connecting to Supabase PostgreSQL Database...');
         await pool.query('SELECT 1'); // Test Connection
-        console.log('✅ Connected to Postgres (Supabase/Neon Cloud)');
-        app.listen(port, '0.0.0.0', () => {
-            console.log(`📡 Ready Cabs API v10.0 (PG Core) ACTIVE at http://127.0.0.1:${port}`);
-        });
+        console.log('✅ Connected to Postgres');
+        if (process.env.NODE_ENV !== 'production') {
+            app.listen(port, '0.0.0.0', () => {
+                console.log(`📡 API ACTIVE at http://127.0.0.1:${port}`);
+            });
+        }
     } catch (err) {
         console.error('❌ Database Initialization Error:', err.message);
-        setTimeout(start, 5000); // Retry logic
+        if (process.env.NODE_ENV !== 'production') setTimeout(start, 5000);
     }
 }
 start();
+
+// Export for Vercel Serverless
+module.exports = app;
