@@ -42,7 +42,7 @@ const sendEmail = (to_email, to_name, message, subject) => {
     .then((res) => console.log('Email sent!', res), (err) => console.error('Email failed', err));
 };
 
-const API_URL = import.meta.env.DEV ? 'http://127.0.0.1:5000/api' : '/api';
+const API_URL = import.meta.env.DEV ? '' : '/api';
 
 export default function App() {
   const initialBackendFallback = [{ id: 'u1', username: 'admin', password: '1234', name: 'Ready Admin', role: 'admin' }];
@@ -214,7 +214,7 @@ export default function App() {
                   disabled={!custReason.trim()}
                   onClick={() => {
                     const update = { status: 'customer_canceled', custCancelReason: custReason, adminSeen: false };
-                    fetch(`http://localhost:5000/api/bookings/${custCancel.id}`, {
+                    fetch(`/bookings/${custCancel.id}`, {
                       method: 'PATCH',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify(update)
@@ -350,7 +350,7 @@ function AuthView({ setUsers, users, onLogin }) {
       if (!formData.username || !formData.password || !formData.name || !formData.whatsapp || !formData.selfie || !formData.email) return setError('Mandatory fields missing');
       console.log("Attempting registration for:", formData.username);
       const newUser = { id: 'u' + Date.now() + Math.random().toString(36).substr(2, 5), ...formData, role: 'customer' };
-      fetch('http://localhost:5000/api/users', {
+      fetch('/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newUser)
@@ -430,7 +430,7 @@ function AdminCars({ cars, setCars }) {
     } else {
       const newCar = { ...cleanForm, id: 'c' + Date.now() + Math.random().toString(36).substr(2, 5) };
       console.log("Sending Car Data:", newCar);
-      fetch('http://localhost:5000/api/cars', {
+      fetch('/cars', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newCar)
@@ -560,7 +560,7 @@ function AdminBookings({ bookings, setBookings, cars, users }) {
   const sortedBookings = useMemo(() => [...bookings].sort((a,b)=>b.id.localeCompare(a.id)), [bookings]);
 
   const handleStatus = (id, status) => {
-    fetch(`http://localhost:5000/api/bookings/${id}`, {
+    fetch(`/bookings/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status, seen: false, adminSeen: true })
@@ -574,7 +574,7 @@ function AdminBookings({ bookings, setBookings, cars, users }) {
   };
 
   const confirmCancel = () => {
-    fetch(`http://localhost:5000/api/bookings/${canceling.id}`, {
+    fetch(`/bookings/${canceling.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'rejected', cancelReason: reason, seen: false, adminSeen: true })
@@ -705,7 +705,7 @@ function AdminCustomers({ users, setUsers, setBookings, cars, adminSettings }) {
   const [manual, setManual] = useState(null); // { user, car, dates, step }
 
   const executeDelete = () => {
-     fetch(`http://127.0.0.1:5000/api/users/delete/${confirmDel.id}`, { method: 'POST' })
+     fetch(`/users/delete/${confirmDel.id}`, { method: 'POST' })
        .then(res => {
          if (res.ok) {
            setUsers(prev => prev.filter(u => u.id !== confirmDel.id));
@@ -854,7 +854,7 @@ function AdminCustomers({ users, setUsers, setBookings, cars, adminSettings }) {
                     <div style={{ display: 'flex', gap: '10px' }}>
                        <button className="btn-success" style={{ flex: 1 }} onClick={() => {
                           const b = { id: 'b' + Date.now() + Math.random().toString(36).substr(2, 5), carId: manual.car.id, customerId: manual.user.id, customerName: manual.user.name, date: manual.dates, idPhoto: manual.user.selfie, status: 'accepted', extraCharge: 0, seen: false, adminSeen: true };
-                          fetch('http://127.0.0.1:5000/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) })
+                          fetch('/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) })
                             .then(() => {
                                setBookings(prev => [...prev, b]);
                                sendEmail(manual.user.email, manual.user.name, `We have manually booked ${manual.car.model} for you. Duration: ${manual.dates.length} days.`, `Confirmed Booking`);
@@ -903,7 +903,7 @@ function CustomerCars({ cars, bookings, setBookings, currentUser, adminSettings 
   
   const submit = () => {
     const b = { id: 'b' + Date.now() + Math.random().toString(36).substr(2, 5), carId: selected.id, customerId: currentUser.id, customerName: currentUser.name, date: [...selectedDates], idPhoto: idImg, status: 'pending', extraCharge: (3500 * selectedDates.length * (driver ? 1 : 0)), seen: false, adminSeen: false };
-    fetch('http://localhost:5000/api/bookings', {
+    fetch('/bookings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(b)
@@ -1031,7 +1031,7 @@ function CustomerNotifications({ bookings, setBookings, cars, currentUser, setCu
                             onClick={(e) => { 
                                e.stopPropagation();
                                if(window.confirm('Remove this alert?')) {
-                                  fetch(`http://127.0.0.1:5000/api/bookings/delete/${b.id}`, { method: 'POST' })
+                                  fetch(`/bookings/delete/${b.id}`, { method: 'POST' })
                                     .then(res => {
                                       if (res.ok) {
                                         setBookings(prev => prev.filter(x => x.id !== b.id));
@@ -1159,7 +1159,7 @@ function ChatWidget({ currentUser, users, messages, setMessages }) {
   useEffect(() => {
     if (open) {
       if (messages.some(m => m.to === currentUser.id && !m.seen)) {
-        fetch(`http://localhost:5000/api/messages/seen/${currentUser.id}`, { method: 'PUT' })
+        fetch(`/messages/seen/${currentUser.id}`, { method: 'PUT' })
           .then(res => { if (res.ok) console.log('Admin: Messages marked read in DB'); });
         setMessages(prev => prev.map(m => m.to === currentUser.id ? { ...m, seen: true } : m));
       }
@@ -1168,7 +1168,7 @@ function ChatWidget({ currentUser, users, messages, setMessages }) {
 
   const handleSend = () => { if (!text || !partnerId) return; 
     const msg = { id: 'm' + Date.now() + Math.random().toString(36).substr(2, 5), from: currentUser.id, to: partnerId, text, image: null, seen: false };
-    fetch('http://localhost:5000/api/messages', {
+    fetch('/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(msg)
@@ -1178,7 +1178,7 @@ function ChatWidget({ currentUser, users, messages, setMessages }) {
   };
   const handleImage = (e) => { const f = e.target.files?.[0]; if (f && partnerId) { const r = new FileReader(); r.onloadend = () => {
     const msg = { id: 'm' + Date.now() + Math.random().toString(36).substr(2, 5), from: currentUser.id, to: partnerId, text: '', image: r.result, seen: false };
-    fetch('http://localhost:5000/api/messages', {
+    fetch('/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(msg)
@@ -1282,7 +1282,7 @@ function AdminAddMember({ setUsers, setActiveTab }) {
     e.preventDefault();
     if (!formData.username || !formData.password || !formData.name || !formData.email || !formData.whatsapp || !formData.selfie) return setError('Please fill all required fields');
     const newUser = { id: 'u' + Date.now() + Math.random().toString(36).substr(2, 5), ...formData, role: 'customer' };
-    fetch('http://127.0.0.1:5000/api/users', {
+    fetch('/users', {
        method: 'POST',
        headers: { 'Content-Type': 'application/json' },
        body: JSON.stringify(newUser)
