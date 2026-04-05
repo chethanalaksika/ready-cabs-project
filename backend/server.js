@@ -155,6 +155,8 @@ app.all(['/api/messages/seen/:toId'], async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+const serverless = require('serverless-http');
+
 async function start() {
     try {
         console.log('⏳ Connecting to Supabase PostgreSQL Database...');
@@ -172,5 +174,5 @@ async function start() {
 }
 start();
 
-// Export for Vercel Serverless
-module.exports = app;
+// Export for Netlify Serverless Functions
+module.exports.handler = serverless(app);

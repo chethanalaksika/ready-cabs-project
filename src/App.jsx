@@ -63,9 +63,9 @@ export default function App() {
     }
   }, [currentUser]);
 
-  const API_URL = 'http://127.0.0.1:5000/api';
+  const API_URL = import.meta.env.DEV ? 'http://127.0.0.1:5000/api' : '/api';
 
-  // --- INITIAL DATA FETCH (MSSQL) ---
+  // --- INITIAL DATA FETCH (PG) ---
   useEffect(() => {
     const fetchData = async () => {
       try {
